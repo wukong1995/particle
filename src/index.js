@@ -9,9 +9,17 @@ const getRandom = () => {
   return Math.random();
 };
 
+// extend
+const extend = (destination,source) => {
+  for(let property in source) {
+    destination[property] = source[property];
+  }
+  return destination;
+};
+
 const getDirect = () => {
   return Math.pow(-1, Math.ceil(getRandom() * 10));
-}
+};
 
 const Point = function(x, y, r) {
   this.x = x;
@@ -42,12 +50,14 @@ const Particle = function(options) {
   that.moveLength = 10;
 
   const getOption = options => {
-    that.options = {
+    const defaults = {
       count: 100,
       color: '#fff',
       selectorId: 'canvas',
       isMove: true
     };
+
+    that.options = extend(defaults, options);
   };
 
   const init = () => {

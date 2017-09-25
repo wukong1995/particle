@@ -1,3 +1,5 @@
 import Particle from '../src';
 
-new Particle();
+new Particle({
+  color: 'red'
+});
