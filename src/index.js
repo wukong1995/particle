@@ -53,8 +53,7 @@ const Particle = function(options) {
     const defaults = {
       count: 100,
       color: '#fff',
-      selectorId: 'canvas',
-      isMove: true
+      selectorId: 'canvas'
     };
 
     that.options = extend(defaults, options);
