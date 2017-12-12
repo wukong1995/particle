@@ -4,12 +4,12 @@ const MAXRADIUS = 4;
 var MAXX = 0;
 var MAXY = 0;
 
-// get random
+// 得到一个随机数
 const getRandom = () => {
   return Math.random();
 };
 
-// extend
+// 合并参数
 const extend = (destination,source) => {
   for(let property in source) {
     destination[property] = source[property];
@@ -17,38 +17,47 @@ const extend = (destination,source) => {
   return destination;
 };
 
+// 得到一个随机方向(1 或 -1)
 const getDirect = () => {
   return Math.pow(-1, Math.ceil(getRandom() * 10));
 };
 
+// 点对象(x坐标 y坐标 r半径)
 const Point = function(x, y, r) {
   this.x = x;
   this.y = y;
   this.r = r;
-  this.sx = getDirect() * getRandom() * 2;
-  this.sy = getDirect() * getRandom() * 2;
+  this.sx = getDirect() * getRandom();
+  this.sy = getDirect() * getRandom();
   const that = this;
 
-  this.draw = function(cxt) {
+  // 绘制点
+  this.draw = (cxt) => {
     cxt.beginPath();
     cxt.arc(that.x, that.y, that.r, 0, Math.PI*2, true);
     cxt.closePath();
     cxt.fill();
   };
 
+  // 点移动
   this.move = () => {
     const { sx, sy } = that;
     that.x += sx;
     that.y += sy;
-    if(that.x > MAXX || that.x < 0) that.sx = -sx;
-    if(that.y > MAXY || that.y < 0) that.sy = -sy;
+    if(that.x > MAXX) that.x = that.x - MAXX;
+    if(that.x < 0) that.x = that.x + MAXX;
+
+    if(that.y > MAXX) that.y = that.y - MAXY;
+    if(that.y < 0) that.y = that.y + MAXY;
   };
 };
 
+// 例子对象
 const Particle = function(options) {
   const that = this;
   that.moveLength = 10;
 
+  // 得到配置参数
   const getOption = options => {
     const defaults = {
       count: 100,
@@ -59,10 +68,10 @@ const Particle = function(options) {
     that.options = extend(defaults, options);
   };
 
+  // 初始化
   const init = () => {
     getOption(options);
 
-    // all particle
     const {color, selectorId, count} = that.options;
 
     const ele = document.getElementById(selectorId);
@@ -73,6 +82,7 @@ const Particle = function(options) {
 
     that.points = [];
 
+    // 生成粒子
     for(let i = 0; i < count; i++) {
       const radius = getRandom() * MAXRADIUS;
       const x = getRandom() * MAXX;
@@ -81,6 +91,7 @@ const Particle = function(options) {
     }
   };
 
+  // 绘制
   const print = () => {
     const { count } = that.options;
     const { cxt, points } = that;
